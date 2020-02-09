@@ -4,6 +4,7 @@ from requests.auth import HTTPBasicAuth
 import sys
 import re
 
+
 class bcolours:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
@@ -22,7 +23,8 @@ def results(valuetext):
     ls,count = [],1
     headers_dict = {'Accept':'application/json'}
     while True:
-        request = requests.get("https://dehashed.com/search?query='%s'&page=%s"%(valuetext,count),auth=HTTPBasicAuth(email,key),headers=headers_dict)
+        print(f"\r {bcolours.OKBLUE}|Requests:{count}|",end="")
+        request = requests.get("https://api.dehashed.com/search?query=%s&page=%s"%(valuetext,count),auth=HTTPBasicAuth(email,key),headers=headers_dict)
         if request.text =='{"message":"You hit your monthly query limit! Contact support to upgrade plan.","success":false}\n':
             print(f"\n\n{bcolours.FAIL}{bcolours.UNDERLINE}OUT OF CREDIT! EXITING...{bcolours.ENDC}\n\n")
             output(ls)
@@ -34,15 +36,13 @@ def results(valuetext):
             response=parsed(request.text)
             for i in response:
                 ls.append(i)
+                print(f"\r {bcolours.OKBLUE}|Requests:{count}|Parsed:{len(ls)}|{bcolours.ENDC}",end="")
             if len(response)<5:
                 break
             count+=1
-            text_progress_bar(count)
             time.sleep(0.06)
     output(ls)
-
-def text_progress_bar(count):
-    print(f"\r {bcolours.OKBLUE}|Requests:{count}|",end="")
+    
         
 def parsed(text):
     returnable=[]
@@ -53,7 +53,7 @@ def parsed(text):
             elif i.split('"hashed_password":"')[1].split(",")[0][:-1] != "null":
                 returnable.append('%s:%s'%(i.split('"email":"')[1].split(",")[0][:-1],i.split('"hashed_password":"')[1].split(",")[0][:-1]))
             else:
-                returnable.append('%s:<no_associated_passwords_found>'%(i.split('"email":"')[1].split(",")[0][:-1]))
+                returnable.append('%s:no_associated_passwords_found'%(i.split('"email":"')[1].split(",")[0][:-1]))
         except:
             pass
     return returnable
@@ -91,9 +91,8 @@ def output(response):
 
     if '-s' in sys.argv or '--stats' in sys.argv:
         stats(response,concatd)
-    
-    
-         
+
+
 def wordlist(value):
     print(f"\n\n\n{bcolours.HEADER}[+] ===WORDLIST=== \n{bcolours.ENDC}    Email and Password pairs seperated by a colon (:) for bruteforcing\n")
     for i in sorted(value):
@@ -119,7 +118,10 @@ def assoc_passwords(value,concatd):
 
 def emails(value,concatd):
     print(f"\n\n\n{bcolours.HEADER}[+] ===EMAILS==={bcolours.ENDC}\n    Just the emails\n")
-    for i in concatd:
+    placeholderls = []
+    for i in concatd.keys():
+        placeholderls.append(i.lower())
+    for i in sorted(placeholderls):
         print(i[:-1])
 
 def stats(value,concatd):
@@ -195,12 +197,12 @@ $$      d$    '$&      8$
         @$.... '$B
        d$$$$$$$$$$:
        ````````````'''
-        cred_fetch()
         if '-h' in sys.argv or '--help' in sys.argv:
             print(f"{bcolours.OKGREEN}{owl}")
             print("\n============ Athena: Dehashed API CLI ============")
             print("     Scrape Dehashed's database via their API \n")
-            print(f"{bcolours.OKBLUE}Useage: python3 Athena.py [ARGUMENTS] [SEARCH_TERM]")
+            print(f"{bcolours.OKBLUE}Useage: python3 athena.py [ARGUMENTS] [SEARCH_TERM]")
+            print("Example: python3 athena.py -A *@email.com")
             print("Argument:                      Explanation:")
             print("-u/--username                  - Passing your dehashed username/email")
             print("-k/--key                       - Passing your dehashed API key")
@@ -209,7 +211,7 @@ $$      d$    '$&      8$
             print("-ap/--associated_passwords     - Email addresses given with all associated passwords found")
             print("-e/--emails                    - Just the emails")
             print("-s/--stats                     - Totals and averages for extra value")
-            print("-A/--All                       - Output all the above formats (Default)")
+            print("-A/--All                       - Output all the above formats")
             print(f"-h/--help                      - Displays this menu.{bcolours.ENDC}\n")
         
             sys.exit()
@@ -222,4 +224,3 @@ $$      d$    '$&      8$
     except KeyboardInterrupt:
         output(ls)
         sys.exit()
-
