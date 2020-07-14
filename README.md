@@ -5,7 +5,7 @@ Dehashed API CLI
 
 Framework to interact with Dehashed's API from the commandline. 
 Requirements:
-
+ 
     1) Modules: requests, numpy
     2) Python version 3.6 or higher
 
