@@ -1,7 +1,7 @@
 import requests, time, sys, re, numpy, json
 
 
-from dhashd_req import results, email_list
+from dhashd_req import results
 from data_print import output
 from colours import prettier_print
 from validation import arg_vali
