@@ -22,16 +22,18 @@ def cred_fetch(parsed_args):
         sys.exit()
     if '-c' in parsed_args:
         with open(parsed_args[parsed_args.index('-c')+1],'r') as file:
+            value = file.readlines()[0]
             try:
-                email,key = file.readlines()[0].split(' ')
+                email,key = value.split(' ')
             except:
-                email,key = file.readlines()[0].split(':')
+                email,key = value.split(':')
     elif '--credentials' in parsed_args:
          with open(parsed_args[parsed_args.index('--credentials')+1],'r') as file:
+            value = file.readlines()[0]
             try:
-                email,key = file.readlines()[0].split(' ')
+                email,key = value.split(' ')
             except:
-                email,key = file.readlines()[0].split(':')
+                email,key = value.split(':')
     elif '-u' in parsed_args:
         email = parsed_args[parsed_args.index('-u')+1]
         if '-k' in parsed_args:
