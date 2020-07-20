@@ -5,21 +5,25 @@ from colours import prettier_print
 
 def parsed(text,target):
     returnable=[]
-    for i in text:
-        obj = dict(i)
-        try:
-            if obj['password'] == None or obj['password'] == '':
-                pass
-            else:
-                if target in obj['email']:
-                    returnable.append('%s:%s'%(obj['email'],obj['password']))
-                elif target in obj['password']:
-                    returnable.append('%s:%s'%(obj['password'],obj['email']))
-                else:
+    try:
+        for i in text:
+            obj = dict(i)
+            try:
+                if obj['password'] == None or obj['password'] == '':
                     pass
-        except:
-            pass
-    return returnable
+                else:
+                    if target in obj['email']:
+                        returnable.append('%s:%s'%(obj['email'],obj['password']))
+                    elif target in obj['password']:
+                        returnable.append('%s:%s'%(obj['password'],obj['email']))
+                    else:
+                        pass
+            except:
+                pass
+        return returnable
+    except:
+        return ['NoRecordsFound:WellDone!']
+    
 
 def concat(text):
     checkls,dic=[],{}

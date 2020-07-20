@@ -15,8 +15,7 @@ def results(parsed_args):
     headers_dict = {'Accept':'application/json'}
     while len:
         if '-d' in parsed_args or '--domain' in parsed_args:
-            request = requests.get('https://api.dehashed.com/search?query=*@%s&page=%s'%(target,count),auth=HTTPBasicAuth(email,key),headers=headers_dict)
-
+            request = requests.get('https://api.dehashed.com/search?query=email:@%s&page=%s'%(target,count),auth=HTTPBasicAuth(email,key),headers=headers_dict)
         elif '-se' in parsed_args or '--single_email' in parsed_args:
             request = requests.get('https://api.dehashed.com/search?query=%s&page=%s'%(target,count),auth=HTTPBasicAuth(email,key),headers=headers_dict)
 
@@ -34,8 +33,6 @@ def results(parsed_args):
             except:
                 print(f"\n\n{prettier_print.FAIL}{prettier_print.UNDERLINE}File not found!{prettier_print.ENDC}\n\n")
             break
-
-
 
         if request.text =='{"message":"You hit your monthly query limit! Contact support to upgrade plan.","success":false}\n':
             print(f"\n\n{prettier_print.FAIL}{prettier_print.UNDERLINE}OUT OF CREDIT! EXITING...{prettier_print.ENDC}\n\n")
