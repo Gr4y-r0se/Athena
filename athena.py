@@ -35,7 +35,7 @@ if __name__ == '__main__':
         print(f"{prettier_print.OKGREEN}{owl}")
         print("\n============ Athena: Dehashed API CLI ============")
         print(f"     Scrape Dehashed's database via their API {prettier_print.ENDC}\n")
-        if '-h' in sys.argv or '--help' in sys.argv:
+        if '-h' in sys.argv or '--help' in sys.argv or sys.argv[::-1][0] == "athena.py":
             print("Useage: python3 athena.py [ARGUMENTS] [SEARCH_TERM]")
             print("Example: python3 athena.py -A -d example.com")
             print("Argument:                      Explanation:")
@@ -56,6 +56,6 @@ if __name__ == '__main__':
             parsed_args = arg_vali()
             results(parsed_args)
     except KeyboardInterrupt:
-        output(ls)
+        print(f"\n{prettier_print.FAIL}{prettier_print.UNDERLINE}{prettier_print.BOLD}Keyboard Interrupt detected from user. Quitting!{prettier_print.ENDC}")
         sys.exit()
 

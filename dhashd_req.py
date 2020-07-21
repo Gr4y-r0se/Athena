@@ -2,6 +2,7 @@
 import requests
 from requests.auth import HTTPBasicAuth
 import json
+import sys
 
 from misc import parsed
 from data_print import output
@@ -13,7 +14,8 @@ def results(parsed_args):
     target = parsed_args[::-1][0]
     email,key = cred_fetch(parsed_args)
     headers_dict = {'Accept':'application/json'}
-    while len:
+    print(f"\r {prettier_print.OKPINK}Starting!!{prettier_print.ENDC}",end="")
+    while True:
         if '-d' in parsed_args or '--domain' in parsed_args:
             request = requests.get('https://api.dehashed.com/search?query=email:@%s&page=%s'%(target,count),auth=HTTPBasicAuth(email,key),headers=headers_dict)
         elif '-se' in parsed_args or '--single_email' in parsed_args:
@@ -35,15 +37,15 @@ def results(parsed_args):
             break
 
         if request.text =='{"message":"You hit your monthly query limit! Contact support to upgrade plan.","success":false}\n':
-            print(f"\n\n{prettier_print.FAIL}{prettier_print.UNDERLINE}OUT OF CREDIT! EXITING...{prettier_print.ENDC}\n\n")
+            print(f"\r\n\n{prettier_print.FAIL}{prettier_print.UNDERLINE}OUT OF CREDIT! EXITING...{prettier_print.ENDC}\n\n")
             output(ls)
             sys.exit()
-
         elif request.text == '{"message":"Invalid API credentials.","success":false}\n':
-            print(f"\n\n{prettier_print.FAIL}{prettier_print.UNDERLINE}Invalid credentials passed!!!{prettier_print.ENDC}\n\n")
+            print(f"\r\n\n{prettier_print.FAIL}{prettier_print.UNDERLINE}Invalid credentials passed!!!{prettier_print.ENDC}\n\n")
             sys.exit()
-
-
+        elif request.status_code != 200:
+            print(f"\r\n\n{prettier_print.FAIL}{prettier_print.UNDERLINE}Request failed with a status code of {request.status_code}.{prettier_print.ENDC}\n\n")
+            sys.exit()
         else:
             returned = json.loads(request.text)
             response = parsed(returned['entries'],target)
