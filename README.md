@@ -1,14 +1,19 @@
 # Athena
-Dehashed API CLI
+### Dehashed API CLI
 
 <img src='./images/athena.png'>
 
-Framework to interact with Dehashed's API from the commandline. 
+### Framework to interact with Dehashed's API from the commandline. 
 Requirements:
  
     1) Modules: requests, numpy
     2) Python version 3.6 or higher
 
+
+### To install all required modules, run the following command after git cloning:
+
+<pre><code>pip3 install -r requirements.txt
+</code></pre>
 
 ## Who is Athena for?
 
