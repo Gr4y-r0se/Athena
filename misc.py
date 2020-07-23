@@ -29,7 +29,7 @@ def concat(text):
     checkls,dic=[],{}
     for i in text:
         email=i.split(':')[0].lower()
-        password=i.split(':')[1].lower()
+        password=i.split(':')[1]
         if email not in checkls:
             checkls.append(email)
             dic["%s:"%email]=password
