@@ -50,7 +50,7 @@ def results(parsed_args):
             returned = json.loads(request.text)
             response = parsed(returned['entries'],target)
             ls.extend(response)
-            print(f"\r {prettier_print.OKPINK}|Requests:{count}|Parsed:{len(ls)}|Requests Remaining:{returned['balance']}{prettier_print.ENDC}",end="")
+            print(f"\r {prettier_print.OKPINK}|Requests:{count}|Parsed:{len(ls)}|Requests Remaining:{returned['balance']}|{prettier_print.ENDC}",end="")
         
         if len(response)<5000:
                 break
