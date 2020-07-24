@@ -23,14 +23,14 @@ def cred_fetch(parsed_args):
     try:
         if '-c' in parsed_args:
             with open(parsed_args[parsed_args.index('-c')+1],'r') as file:
-                value = file.readlines()[0]
+                value = file.readlines()[0].strip()
                 try:
                     email,key = value.split(' ')
                 except:
                     email,key = value.split(':')
         elif '--credentials' in parsed_args:
              with open(parsed_args[parsed_args.index('--credentials')+1],'r') as file:
-                value = file.readlines()[0]
+                value = file.readlines()[0].strip()
                 try:
                     email,key = value.split(' ')
                 except:
