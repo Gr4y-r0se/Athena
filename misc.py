@@ -23,6 +23,29 @@ def parsed(text,target):
         return returnable
     except:
         return ['NoRecordsFound:WellDone!']
+
+
+
+def listparsed(text,target):
+    returnable=[]
+    try:
+        for i in text:
+            obj = dict(i)
+            try:
+                if obj['password'] == None or obj['password'] == '':
+                    pass
+                else:
+                    if target in obj['email']:
+                        returnable.append('%s:%s'%(obj['email'],obj['password']))
+                    elif target in obj['password']:
+                        returnable.append('%s:%s'%(obj['password'],obj['email']))
+                    else:
+                        pass
+            except:
+                pass
+        return returnable
+    except:
+        return None
     
 
 def concat(text):
