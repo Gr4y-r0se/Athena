@@ -4,7 +4,7 @@ from requests.auth import HTTPBasicAuth
 import json
 import sys
 
-from misc import parsed
+from misc import parsed,listparsed
 from data_print import output
 from colours import prettier_print
 from validation import cred_fetch
@@ -13,7 +13,8 @@ def results(parsed_args):
     ls,count = [],1
     target = parsed_args[::-1][0]
     email,key = cred_fetch(parsed_args)
-    headers_dict = {'Accept':'application/json'}
+    headers_dict = {'Accept':'application/json', 
+    'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.3538.77 Safari/537.36'} #Can't use python default User-Agent
     print(f"\r {prettier_print.OKPINK}Starting!!{prettier_print.ENDC}",end="")
     while True:
         if '-d' in parsed_args or '--domain' in parsed_args:
@@ -27,8 +28,11 @@ def results(parsed_args):
                     for i in targets.readlines():
                         request = requests.get('https://api.dehashed.com/search?query=%s&page=1'%(i),auth=HTTPBasicAuth(email,key),headers=headers_dict)
                         returned = json.loads(request.text)
-                        response = parsed(returned['entries'],i)
-                        ls.extend(response)
+                        response = listparsed(returned['entries'],i)
+                        if response == None:
+                            pass
+                        else:
+                            ls.extend(response)
                         print(f"\r {prettier_print.OKPINK}|Requests:{count}|Parsed:{len(ls)}|Requests Remaining:{returned['balance']}{prettier_print.ENDC}",end="")
                         count+=1
                     break
